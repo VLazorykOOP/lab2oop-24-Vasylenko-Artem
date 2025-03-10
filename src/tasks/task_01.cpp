@@ -2,43 +2,46 @@
 
 #include "console.h"
 #include "tasks.h"
-#include "array.h"
+#include "binary.h"
 
-// Задано одновимірний масив А розміру N.Знайти серед всіх від’ємних максимальний елемент масиву та його індекс.
+// Задано цілі числа a, b, c та d. Обчислити вираз без використання операцій множення та ділення(замінивши на їх операцій зсувів).
+
+// (127*a + 32*c)/4096 - d * 1200 + b * 131
 
 using namespace std;
+using namespace binary;
 
 void task_01()
 {
-	int size = InputSizeArray();
-	vector<int> array = inputElementsOfArray(size);
-	vector<int> indexes = {};
+	int a, b, c, d;
 
-	int maxNegative = findMaxNegativeElement(array);
+	cout << "Enter values for a, b, c, d: ";
+	cin >> a >> b >> c >> d;
 
-	if (maxNegative == 0)
-	{
-		cout << "No negative elements in the array." << endl;
-		return;
-	}
+	int result = addition(division(multyply(127, a), multyply(32, c)), 4096);
+	result = subtraction(result, multyply(d, 1200));
+	result = addition(result, multyply(b, 131));
 
-	for (int i = 0; i < array.size(); i++)
-		if (array[i] == maxNegative)
-			indexes.push_back(i);
+	cout << "Result: " << result << endl;
 
-	int indexesSize = indexes.size();
+	result = (127 * a + 32 * c) / 4096 - d * 1200 + b * 131;
 
-	if (indexesSize == 1)
-	{
-		cout << "Maximum negative element: " << maxNegative << " at index " << indexes[0] << endl;
-		return;
-	}
-
-	if (indexesSize > 1)
-	{
-		cout << "Maximum negative element: " << maxNegative << " at index [ ";
-		for (int i = 0; i < indexesSize; i++)
-			cout << indexes[i] << (indexesSize - 1 == i ? " " : ", ");
-		cout << "]\n";
-	}
+	cout << "Result: " << result << endl;
 }
+
+// void toBinary(int num)
+// {
+// 	if (num == 0)
+// 	{
+// 		std::cout << 0;
+// 		return;
+// 	}
+// 	std::string binary = "";
+// 	while (num > 0)
+// 	{
+// 		binary = std::to_string(num % 2) + binary; // Добавляем остаток в начало строки
+// 		num /= 2;
+// 	}
+
+// 	std::cout << binary;
+// }
