@@ -19,8 +19,12 @@ void task_01()
 	cin >> a >> b >> c >> d;
 
 	int result = addition(division(multyply(127, a), multyply(32, c)), 4096);
+	cout << "Result: " << result << endl;
+	cout << "Result: " << (127 * a + 32 * c) / 4096 << endl;
 	result = subtraction(result, multyply(d, 1200));
 	result = addition(result, multyply(b, 131));
+
+	newLine();
 
 	cout << "Result: " << result << endl;
 
