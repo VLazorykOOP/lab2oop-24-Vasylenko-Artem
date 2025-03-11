@@ -18,7 +18,7 @@ void task_01()
 	cout << "Enter values for a, b, c, d: ";
 	cin >> a >> b >> c >> d;
 
-	int result = addition(division(multyply(127, a), multyply(32, c)), 4096);
+	int result = addition(divide(multyply(127, a), multyply(32, c)), 4096);
 	cout << "Result: " << result << endl;
 	cout << "Result: " << (127 * a + 32 * c) / 4096 << endl;
 	result = subtraction(result, multyply(d, 1200));
