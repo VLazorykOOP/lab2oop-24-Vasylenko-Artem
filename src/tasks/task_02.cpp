@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include <vector>
 
@@ -18,76 +19,45 @@
 
 using namespace std;
 
-// void showMenuTask()
-// {
-// 	cout << "Your choice:";
-// 	cout << "\n1 - Read file input.txt";
-// 	cout << "\n2 - Input your data";
-// 	newLine();
-// 	cout << "\nq - Quit";
-// 	newLine();
-// 	cout << "\nYour choice: ";
-// }
-
-// void chooseTask()
-// {
-// 	clearConsole();
-// 	char ch;
-// 	vector<char> validChoices = {'1', '2', '3', '4', 'q'};
-
-// 	while (true)
-// 	{
-// 		showMenuTask();
-// 		cin >> ch;
-// 		bool selected = checkChoiceInput(ch, validChoices);
-
-// 		if (!selected)
-// 		{
-// 			clearConsole();
-// 			cout << "Invalid choice. Please try again.\n";
-// 			pauseConsole();
-// 			continue;
-// 		}
-
-// 		clearConsole();
-// 		cout << "Task" << ch << " selected\n";
-// 		newLine();
-
-// 		switch (ch)
-// 		{
-// 		case '1':
-// 			task_01();
-// 			break;
-// 		case '2':
-// 			task_02();
-// 			break;
-// 		case 'q':
-// 			return;
-// 		}
-
-// 		pauseConsole();
-// 	}
-// }
-
 void task_02()
 {
-	char text[8][8];
+	const int rows = 8, cols = 8;
+	char array[rows][cols] = {};
 
-	ofstream binaryOutput("public/binaryOutput.dat", ios::out | ios::binary);
+	ifstream binaryInput("public/binaryInput.txt", std::ios::binary);
 
-	if (binaryOutput.fail())
+	if (binaryInput.fail())
 	{
 		cout << "Error opening file";
 		return;
 	}
 
-	ofstream binaryInput("public/binaryInput.txt");
+	for (int i = 0; i < rows; i++)
+		for (int j = 0; j < cols; j++)
+		{
+			char ch = binaryInput.get();
 
-	if (binaryInput.is_open())
+			if (ch == '\n')
+			{
+				j--;
+				continue;
+			}
+
+			if (!binaryInput.fail())
+				array[i][j] = ch;
+			else
+				array[i][j] = ' ';
+		}
+
+	binaryInput.close();
+
+	for (int i = 0; i < rows; i++)
 	{
-		binaryInput << "test123";
-		binaryInput.close();
+		for (int j = 0; j < cols; j++)
+			cout << array[i][j];
+		cout << endl;
 	}
 
-	cout << "test";
+	ofstream binaryOutput("public/binaryOutput.dat");
+	binaryOutput.close();
 }
