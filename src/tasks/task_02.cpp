@@ -33,20 +33,24 @@ void task_02()
 	}
 
 	for (int i = 0; i < rows; i++)
-		for (int j = 0; j < cols; j++)
+		for (int j = 0; j < cols + 1; j++)
 		{
 			char ch = binaryInput.get();
 
+			if (j == cols && ch != '\n')
+				continue;
+
 			if (ch == '\n')
 			{
-				j--;
-				continue;
+				while (j < cols)
+					array[i][j++] = '_';
+				break;
 			}
 
 			if (!binaryInput.fail())
 				array[i][j] = ch;
 			else
-				array[i][j] = ' ';
+				array[i][j] = '_';
 		}
 
 	binaryInput.close();
