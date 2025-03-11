@@ -24,7 +24,15 @@ void task_02()
 	const int rows = 8, cols = 8;
 	char array[rows][cols] = {};
 
-	ifstream binaryInput("public/binaryInput.txt", std::ios::binary);
+	ifstream binaryInput("public/binaryInput.txt", ios::binary);
+
+	if (!binaryInput)
+	{
+		ofstream creatFile("public/binaryInput.txt", ios::binary);
+		creatFile.close();
+
+		binaryInput.open("public/binaryInput.txt", ios::binary);
+	}
 
 	if (binaryInput.fail())
 	{
@@ -43,14 +51,14 @@ void task_02()
 			if (ch == '\n')
 			{
 				while (j < cols)
-					array[i][j++] = '_';
+					array[i][j++] = '+';
 				break;
 			}
 
 			if (!binaryInput.fail())
 				array[i][j] = ch;
 			else
-				array[i][j] = '_';
+				array[i][j] = '+';
 		}
 
 	binaryInput.close();
@@ -62,6 +70,6 @@ void task_02()
 		cout << endl;
 	}
 
-	ofstream binaryOutput("public/binaryOutput.dat");
-	binaryOutput.close();
+	// ofstream binaryOutput("public/binaryOutput.dat");
+	// binaryOutput.close();
 }
