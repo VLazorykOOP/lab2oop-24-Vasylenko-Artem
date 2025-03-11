@@ -14,7 +14,6 @@ all: build run
 build: $(TARGET)
 
 $(TARGET): $(OBJS)
-	@echo "Building..."
 	@mkdir -p $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
 
@@ -23,9 +22,7 @@ $(BUILD_DIR)/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 run: build
-	@echo "Running..."
 	@$(TARGET)
 
 clean:
-	@echo "Cleaning up..."
 	@rm -rf $(BUILD_DIR)

@@ -10,6 +10,13 @@
 			"detail": "Compiling C++ files"
 		},
 		{
+			"label": "Clear build/",
+			"type": "shell",
+			"command": "make clean",
+			"problemMatcher": ["$gcc"],
+			"detail": "Delete dir build/"
+		},
+		{
 			"label": "Run C++",
 			"type": "shell",
 			"command": "make run",
