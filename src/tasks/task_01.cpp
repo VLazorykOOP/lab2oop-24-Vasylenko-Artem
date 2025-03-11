@@ -18,14 +18,14 @@ void task_01()
 	cout << "Enter values for a, b, c, d: ";
 	cin >> a >> b >> c >> d;
 
-	cout << divide(addition(multyply(127, a), multyply(32, c)), 4096) - multyply(d, 1200) + multyply(b, 131) << endl;
+	cout << segmentation(addition(multiply(127, a), multiply(32, c)), 4096) - multiply(d, 1200) + multiply(b, 131) << endl;
 	cout << (127 * a + 32 * c) / 4096 - d * 1200 + b * 131 << endl;
 
-	// int result = addition(divide(multyply(127, a), multyply(32, c)), 4096);
+	// int result = addition(segmentation(multiply(127, a), multiply(32, c)), 4096);
 	// cout << "Result: " << result << endl;
 	// cout << "Result: " << (127 * a + 32 * c) / 4096 << endl;
-	// result = subtraction(result, multyply(d, 1200));
-	// result = addition(result, multyply(b, 131));
+	// result = subtraction(result, multiply(d, 1200));
+	// result = addition(result, multiply(b, 131));
 
 	// newLine();
 
