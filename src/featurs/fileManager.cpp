@@ -6,75 +6,21 @@ using namespace std;
 
 FileManager::FileManager(const string &path) : filePath(path) {}
 
-void FileManager::createFile()
-{
-	ofstream file(filePath);
-	if (file.is_open())
-	{
-		cout << "File created: " << filePath << endl;
-		file.close();
-	}
-	else
-	{
-		cerr << "Failed to create file: " << filePath << endl;
-	}
-}
-
-void FileManager::deleteFile()
-{
-	if (remove(filePath.c_str()) == 0)
-		cout << "File deleted: " << filePath << endl;
-	else
-		cerr << "Failed to delete file: " << filePath << endl;
-}
-
-bool FileManager::checkFile()
-{
-	ifstream file(filePath);
-	return file.good();
-}
+void FileManager::createFile() { outFile.open(filePath, ios::out | ios::binary); }
+void FileManager::deleteFile() { remove(filePath.c_str()); }
 
 void FileManager::openFile()
 {
-	ifstream file(filePath);
-	if (file.is_open())
-	{
-		cout << "File opened: " << filePath << endl;
-		file.close();
-	}
-	else
-	{
-		cerr << "Failed to open file: " << filePath << endl;
-	}
+	if (!inFile)
+		createFile();
+	inFile.open(filePath, ios::binary);
 }
 
-void FileManager::writeFile(string &content)
+void FileManager::closeFile()
 {
-	ofstream file(filePath);
-	if (file.is_open())
-	{
-		file << content;
-		cout << "File written: " << filePath << endl;
-		file.close();
-	}
-	else
-	{
-		cerr << "Failed to write to file: " << filePath << endl;
-	}
-}
+	if (outFile.is_open())
+		outFile.close();
 
-void FileManager::readFile()
-{
-	ifstream file(filePath);
-	if (file.is_open())
-	{
-		string line;
-		while (getline(file, line))
-			cout << line << endl;
-		file.close();
-	}
-	else
-	{
-		cerr << "Failed to read file: " << filePath << endl;
-	}
+	if (inFile.is_open())
+		inFile.close();
 }

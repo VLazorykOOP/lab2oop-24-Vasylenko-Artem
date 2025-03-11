@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -9,12 +10,13 @@ private:
 	string filePath;
 
 public:
+	ifstream inFile;
+	ofstream outFile;
+
 	FileManager(const string &path);
 
 	void createFile();
 	void deleteFile();
-	bool checkFile();
 	void openFile();
-	void writeFile(std::string &content);
-	void readFile();
+	void closeFile();
 };

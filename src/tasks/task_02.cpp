@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
 
-#include <vector>
-
 #include "taskManager.h"
 #include "console.h"
+#include "fileManager.h"
 
 // Задано 8 рядків тексту. У рядку до 8 символів. Доповнити пробілами рядки до 8 символів.
 // Шифрувати тексти таким чином, щоб кожний символ тексту записувався у два байти.Два байти мають таку структуру:
@@ -20,43 +19,31 @@ using namespace std;
 
 void task_02()
 {
+	FileManager testFile("public/binaryInput.txt");
+	testFile.openFile();
+
 	const int rows = 8, cols = 8;
 	char array[rows][cols] = {};
-
-	ifstream binaryInput("public/binaryInput.txt", ios::binary);
-
-	if (!binaryInput)
-	{
-		ofstream creatFile("public/binaryInput.txt", ios::binary);
-		creatFile.close();
-
-		binaryInput.open("public/binaryInput.txt", ios::binary);
-	}
-
-	if (binaryInput.fail())
-	{
-		cout << "Error opening file";
-		return;
-	}
 
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < cols + 1; j++)
 		{
-			char ch = binaryInput.get();
+			char ch = testFile.inFile.get();
 
 			if (j == cols && ch != '\n')
-				continue;
+				break;
 
 			if (ch == '\n')
 			{
 				while (j < cols)
 					array[i][j++] = '+';
+				break;
 			}
 
-			!binaryInput.fail() ? array[i][j] = ch : array[i][j] = '+';
+			!testFile.inFile.fail() ? array[i][j] = ch : array[i][j] = '+';
 		}
 
-	binaryInput.close();
+	testFile.closeFile();
 
 	for (int i = 0; i < rows; i++)
 	{
@@ -64,7 +51,4 @@ void task_02()
 			cout << array[i][j];
 		cout << endl;
 	}
-
-	// ofstream binaryOutput("public/binaryOutput.dat");
-	// binaryOutput.close();
 }
