@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include "binary.h"
+#include "binaryOperation.h"
 
 using namespace std;
 

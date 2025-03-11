@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "tasks.h"
+#include "taskManager.h"
 
 // Реалізувати завдання 2 з використанням структур з бітовими полями та об’єднаннями.
 

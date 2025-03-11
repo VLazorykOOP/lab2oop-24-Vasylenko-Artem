@@ -21,5 +21,5 @@ void pauseConsole()
 
 void newLine()
 {
-	std::cout << "\n";
+	std::cout << std::endl;
 }

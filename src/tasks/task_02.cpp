@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 
 #include <vector>
 
-#include "tasks.h"
+#include "taskManager.h"
 #include "console.h"
 
 // Задано 8 рядків тексту. У рядку до 8 символів. Доповнити пробілами рядки до 8 символів.
@@ -52,13 +51,9 @@ void task_02()
 			{
 				while (j < cols)
 					array[i][j++] = '+';
-				break;
 			}
 
-			if (!binaryInput.fail())
-				array[i][j] = ch;
-			else
-				array[i][j] = '+';
+			!binaryInput.fail() ? array[i][j] = ch : array[i][j] = '+';
 		}
 
 	binaryInput.close();
