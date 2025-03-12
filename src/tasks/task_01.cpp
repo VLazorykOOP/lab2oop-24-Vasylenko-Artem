@@ -23,20 +23,15 @@ void task_01()
 	cout << "b = " << b << endl;
 	cout << "c = " << c << endl;
 	cout << "d = " << d << endl;
-	pauseConsole();
 
-	newLine();
 	cout << "(127 * a + 32 * c)/4096 - d * 1200 + b * 131" << endl;
 	cout << "(127 * " << a << " + 32 * " << c << ")/4096 - " << d << " * 1200 + " << b << " * 131" << endl;
-	pauseConsole();
 
-	newLine();
 	cout << "1." << endl;
 	newLine();
 	cout << "Binary: " << endl;
-	cout << segmentation(addition(multiply(127, a), multiply(32, c)), 4096) - multiply(d, 1200) + multiply(b, 131) << endl;
+	cout << segmentation((multiply(127, a) + multiply(32, c)), 4096) - multiply(d, 1200) + multiply(b, 131) << endl;
 	newLine();
 	cout << "Decimal: " << endl;
 	cout << (127 * a + 32 * c) / 4096 - d * 1200 + b * 131 << endl;
-	pauseConsole();
 }
