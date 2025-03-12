@@ -24,8 +24,12 @@ void task_01()
 	cout << "c = " << c << endl;
 	cout << "d = " << d << endl;
 
+	newLine();
+
 	cout << "(127 * a + 32 * c)/4096 - d * 1200 + b * 131" << endl;
 	cout << "(127 * " << a << " + 32 * " << c << ")/4096 - " << d << " * 1200 + " << b << " * 131" << endl;
+
+	newLine();
 
 	cout << "1." << endl;
 	newLine();

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-FileManager::FileManager(const string &path) : filePath(path) {}
+FileManager::FileManager(const string &path) : filePath(path) { openFile(); }
 
 void FileManager::createFile() { outFile.open(filePath, ios::out | ios::binary); }
 void FileManager::deleteFile() { remove(filePath.c_str()); }

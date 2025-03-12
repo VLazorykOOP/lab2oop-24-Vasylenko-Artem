@@ -19,19 +19,19 @@ using namespace std;
 
 void task_02()
 {
-	FileManager testFile("public/binaryInput.txt");
-	testFile.openFile();
+	FileManager binaryInput("public/binaryInput.txt");
 
-	const int rows = 8, cols = 8;
-	char array[rows][cols] = {};
+	const int rows = 8,
+			  cols = 8;
+	char array[rows][cols];
 
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < cols + 1; j++)
 		{
-			char ch = testFile.inFile.get();
+			char ch = binaryInput.inFile.get();
 
 			if (j == cols && ch != '\n')
-				break;
+				continue;
 
 			if (ch == '\n')
 			{
@@ -40,10 +40,10 @@ void task_02()
 				break;
 			}
 
-			!testFile.inFile.fail() ? array[i][j] = ch : array[i][j] = '+';
+			!binaryInput.inFile.fail() ? array[i][j] = ch : array[i][j] = '+';
 		}
 
-	testFile.closeFile();
+	binaryInput.closeFile();
 
 	for (int i = 0; i < rows; i++)
 	{
@@ -51,4 +51,38 @@ void task_02()
 			cout << array[i][j];
 		cout << endl;
 	}
+
+	unsigned short binData[64];
+
+	for (int i = 0; i < rows; i++)
+		for (int j = 0; j < cols; j++)
+		{
+			int firstSet, secondSet;
+			for (int k = 0; k < 4; k++)
+			{
+				if (((array[i][j] >> 4) >> k) & 1)
+					firstSet++;
+
+				if ((i >> k) & 1)
+					firstSet++;
+
+				if ((array[i][j] >> k) & 1)
+					secondSet++;
+
+				if ((j >> k) & 1)
+					secondSet++;
+			}
+
+			binData[(i + 1) * (j + 1)] = i;
+			binData[(i + 1) * (j + 1)] <<= 4;
+			binData[(i + 1) * (j + 1)] |= (array[i][j] >> 4);
+			binData[(i + 1) * (j + 1)] <<= 1;
+			binData[(i + 1) * (j + 1)] |= (firstSet & 1);
+			binData[(i + 1) * (j + 1)] <<= 4;
+			binData[(i + 1) * (j + 1)] |= (array[i][j] & 15);
+			binData[(i + 1) * (j + 1)] <<= 3;
+			binData[(i + 1) * (j + 1)] |= j;
+			binData[(i + 1) * (j + 1)] <<= 1;
+			binData[(i + 1) * (j + 1)] |= (secondSet & 1);
+		}
 }
