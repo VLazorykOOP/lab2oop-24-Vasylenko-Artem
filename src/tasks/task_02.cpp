@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <bitset>
 
 #include "taskManager.h"
 #include "console.h"
@@ -85,4 +86,17 @@ void task_02()
 			binData[(i + 1) * (j + 1)] <<= 1;
 			binData[(i + 1) * (j + 1)] |= (secondSet & 1);
 		}
+
+	ofstream binaryOutput("public/binaryOutput.dat", ios::out | ios::binary);
+	binaryOutput.write((char *)binData, sizeof(unsigned short) * 64);
+	binaryOutput.close();
+
+	FILE *f = fopen("public/binaryOutput.dat", "r");
+	fread(binData, sizeof(char), 128, f);
+	fclose(f);
+
+	for (int i = 0; i < 64; i++)
+	{
+		cout << bitset<16>(binData[i]) << endl;
+	}
 }
