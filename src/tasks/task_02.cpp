@@ -123,4 +123,82 @@ void task_02()
 			cout << endl;
 		cout << bitset<16>(binData[i]) << endl;
 	}
+
+	char outCharData[rows][cols];
+	int countBin = 0;
+
+	for (int i = 0; i < 64; i++)
+	{
+		int firstSet = 0, secondSet = 0;
+		int colsBin = 0, rowsBin = 0;
+		char symbolBin = 0;
+
+		rowsBin = binData[i] >> 13;
+		colsBin = (binData[i] >> 1) & 7;
+
+		symbolBin = binData[i] >> 9 & 15;
+		symbolBin <<= 4;
+		symbolBin |= (binData[i] >> 4) & 15;
+
+		for (int k = 0; k < 4; k++)
+		{
+			if (((symbolBin >> 4) >> k) & 1)
+			{
+				firstSet++;
+			}
+
+			if ((rowsBin >> k) & 1)
+			{
+				firstSet++;
+			}
+
+			if ((symbolBin >> k) & 1)
+			{
+				secondSet++;
+			}
+
+			if ((colsBin >> k) & 1)
+			{
+				secondSet++;
+			}
+		}
+
+		if (((binData[i] >> 8) & 1) == (firstSet & 1) && ((binData[i]) & 1) == (secondSet & 1))
+		{
+			cout << i << " - " << bitset<16>(binData[i]) << " - Integirity passed: " << symbolBin << endl;
+			outCharData[rowsBin][colsBin] = symbolBin;
+		}
+		else
+		{
+			// cout << bitset<16>(binData[i]) << " - Failed: " << firstSet << " - first" << secondSet << " - second" << endl;
+
+			cout << "Error\n";
+		}
+	}
 }
+
+// // у бітах 0 - 2 знаходиться номер рядка символу(3 біти),
+// binData[count] = i;
+// // cout << binData[count] << endl;
+
+// // у бітах 3 - 6 молодша частина ASCII - коду символу(4 біти),
+// binData[count] <<= 4;
+// binData[count] |= (array[i][j] >> 4);
+
+// // 7 біт – біт парності перших двох полів(1 біт)
+// binData[count] <<= 1;
+// binData[count] |= (firstSet & 1);
+// // cout << "bitSet: " << bitset<16>(binData[++count]) << endl;
+
+// // у бітах 8 - 11 старша частина ASCII - коду символу(4 біти),
+// binData[count] <<= 4;
+// binData[count] |= (array[i][j] & 15);
+
+// // у бітах 12 - 14 позиція символу в рядку(3 біти),
+// binData[count] <<= 3;
+// binData[count] |= j;
+
+// // 15 біт - біт парності попередніх двох полів(1 біт).
+// binData[count] <<= 1;
+// binData[count] |= (secondSet & 1);
+// cout << "bitSet: " << bitset<16>(binData[count]) << endl;
