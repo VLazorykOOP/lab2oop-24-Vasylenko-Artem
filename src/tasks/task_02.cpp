@@ -157,7 +157,7 @@ void task_02()
 		}
 		else
 		{
-			cout << "Error\n";
+			cout << i << " - " << bitset<16>(binData[i]) << " - Integirity failed: " << symbolBin << endl;
 		}
 	}
 
