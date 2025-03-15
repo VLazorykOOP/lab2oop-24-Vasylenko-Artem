@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <bitset>
+#include <vector>
 
 #include "taskManager.h"
 #include "console.h"
@@ -16,6 +17,26 @@
 // у бітах 12 - 14 позиція символу в рядку(3 біти),
 // 15 біт - біт парності попередніх двох полів(1 біт).
 
+void outputArray(const vector<vector<char>> &array)
+{
+	for (const auto &row : array)
+	{
+		for (char ch : row)
+			cout << ch;
+		cout << endl;
+	}
+}
+
+int calculateParity(int value, int bitCount)
+{
+	int count = 0;
+	for (int k = 0; k < bitCount; k++)
+		if ((value >> k) & 1)
+			count++;
+
+	return count & 1;
+}
+
 using namespace std;
 
 void task_02()
@@ -24,7 +45,8 @@ void task_02()
 
 	const int rows = 8,
 			  cols = 8;
-	char array[rows][cols];
+
+	vector<vector<char>> array(rows, vector<char>(cols));
 
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < cols + 1; j++)
@@ -46,12 +68,7 @@ void task_02()
 
 	binaryInput.closeFile();
 
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-			cout << array[i][j];
-		cout << endl;
-	}
+	outputArray(array);
 
 	unsigned short binData[64];
 
@@ -60,21 +77,8 @@ void task_02()
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < cols; j++)
 		{
-			int firstSet = 0, secondSet = 0;
-			for (int k = 0; k < 4; k++)
-			{
-				if (((array[i][j] >> 4) >> k) & 1)
-					firstSet++;
-
-				if ((i >> k) & 1)
-					firstSet++;
-
-				if ((array[i][j] >> k) & 1)
-					secondSet++;
-
-				if ((j >> k) & 1)
-					secondSet++;
-			}
+			int firstSet = calculateParity((array[i][j] >> 4), 4) + calculateParity(i, 4);
+			int secondSet = calculateParity(array[i][j], 4) + calculateParity(j, 4);
 
 			// у бітах 0 - 2 знаходиться номер рядка символу(3 біти),
 			binData[count] = i;
@@ -102,8 +106,6 @@ void task_02()
 			++count;
 		}
 
-	newLine();
-
 	ofstream binaryOutput("public/binaryOutput.dat", ios::out | ios::binary);
 	binaryOutput.write((char *)binData, sizeof(unsigned short) * 64);
 	binaryOutput.close();
@@ -119,12 +121,11 @@ void task_02()
 		cout << bitset<16>(binData[i]) << endl;
 	}
 
-	char outCharData[rows][cols];
+	vector<vector<char>> outCharData(rows, vector<char>(cols));
 	int countBin = 0;
 
 	for (int i = 0; i < 64; i++)
 	{
-		int firstSet = 0, secondSet = 0;
 		int colsBin = 0, rowsBin = 0;
 		char symbolBin = 0;
 
@@ -135,20 +136,8 @@ void task_02()
 		symbolBin <<= 4;
 		symbolBin |= (binData[i] >> 4) & 15;
 
-		for (int k = 0; k < 4; k++)
-		{
-			if (((symbolBin >> 4) >> k) & 1)
-				firstSet++;
-
-			if ((rowsBin >> k) & 1)
-				firstSet++;
-
-			if ((symbolBin >> k) & 1)
-				secondSet++;
-
-			if ((colsBin >> k) & 1)
-				secondSet++;
-		}
+		int firstSet = calculateParity((symbolBin >> 4), 4) + calculateParity(rowsBin, 4);
+		int secondSet = calculateParity(symbolBin, 4) + calculateParity(colsBin, 4);
 
 		if (((binData[i] >> 8) & 1) == (firstSet & 1) && ((binData[i]) & 1) == (secondSet & 1))
 		{
@@ -161,12 +150,5 @@ void task_02()
 		}
 	}
 
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			cout << outCharData[i][j];
-		}
-		cout << endl;
-	}
+	outputArray(outCharData);
 }
