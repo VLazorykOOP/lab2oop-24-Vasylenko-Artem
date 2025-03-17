@@ -1,11 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <bitset>
 #include <vector>
 
 #include "taskManager.h"
 #include "console.h"
-#include "fileManager.h"
 
 // Задано 8 рядків тексту. У рядку до 8 символів. Доповнити пробілами рядки до 8 символів.
 // Шифрувати тексти таким чином, щоб кожний символ тексту записувався у два байти.Два байти мають таку структуру:
@@ -17,17 +15,47 @@
 // у бітах 12 - 14 позиція символу в рядку(3 біти),
 // 15 біт - біт парності попередніх двох полів(1 біт).
 
-void outputArray(const vector<vector<char>> &array)
+using namespace std;
+
+const int ROWS = 8, COLS = 8;
+
+void readInputFile(unsigned char charData[ROWS][COLS], string filename)
 {
-	for (const auto &row : array)
+	ifstream binaryInput(filename, ios::out | ios::binary);
+
+	if (!binaryInput.is_open())
 	{
-		for (char ch : row)
+		cout << "Can't open file " << filename << endl;
+		return;
+	}
+
+	for (int i = 0; i < ROWS; i++)
+		for (int j = 0; j < COLS; j++)
+		{
+			unsigned char ch;
+
+			do
+			{
+				ch = binaryInput.get();
+			} while (ch == '\n' && !binaryInput.eof() && COLS - 1 != j);
+
+			charData[i][j] = !binaryInput.fail() ? ch : ' ';
+		}
+
+	binaryInput.close();
+}
+
+void printArray(unsigned char charData[ROWS][COLS])
+{
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (char ch : charData[i])
 			cout << ch;
 		cout << endl;
 	}
 }
 
-int calculateParity(int value, int bitCount)
+int calcParity(int value, int bitCount)
 {
 	int count = 0;
 	for (int k = 0; k < bitCount; k++)
@@ -37,118 +65,128 @@ int calculateParity(int value, int bitCount)
 	return count & 1;
 }
 
-using namespace std;
-
-void task_02()
+string charToBinary(unsigned int ch, int bitCount)
 {
-	FileManager binaryInput("public/binaryInput.txt");
+	string binary;
 
-	const int rows = 8,
-			  cols = 8;
+	for (int i = bitCount - 1; i >= 0; i--)
+		binary += (ch & (1 << i)) ? '1' : '0';
 
-	vector<vector<char>> array(rows, vector<char>(cols));
+	return binary;
+}
 
-	for (int i = 0; i < rows; i++)
-		for (int j = 0; j < cols + 1; j++)
+void decode(unsigned short binData[ROWS * COLS], unsigned char charData[ROWS][COLS])
+{
+	int count = 0;
+	for (int i = 0; i < ROWS; i++)
+		for (int j = 0; j < COLS; j++)
 		{
-			char ch = binaryInput.inFile.get();
+			char ch = charData[i][j];
 
-			if (j == cols && ch != '\n')
-				continue;
+			int firstSet = (calcParity((ch >> 4), 4) + calcParity(i, 4)) & 1;
+			int secondSet = (calcParity(ch, 4) + calcParity(j, 4)) & 1;
 
-			if (ch == '\n')
-			{
-				while (j < cols)
-					array[i][j++] = '+';
-				break;
-			}
+			unsigned short encoded = (i & 7);	  // у бітах 0 - 2 знаходиться номер рядка символу(3 біти),
+			encoded = (encoded << 4) | (ch >> 4); // у бітах 3 - 6 молодша частина ASCII - коду символу(4 біти),
+			encoded = (encoded << 1) | firstSet;  // 7 біт – біт парності перших двох полів(1 біт)
+			encoded = (encoded << 4) | (ch & 15); // у бітах 8 - 11 старша частина ASCII - коду символу(4 біти),
+			encoded = (encoded << 3) | j;		  // у бітах 12 - 14 позиція символу в рядку(3 біти),
+			encoded = (encoded << 1) | secondSet; // 15 біт - біт парності попередніх двох полів(1 біт).
 
-			!binaryInput.inFile.fail() ? array[i][j] = ch : array[i][j] = '+';
+			binData[count++] = encoded;
 		}
+}
 
-	binaryInput.closeFile();
-
-	outputArray(array);
-
-	unsigned short binData[64];
-
+void encode(unsigned char charData[ROWS][COLS], unsigned short binData[ROWS * COLS])
+{
 	int count = 0;
 
-	for (int i = 0; i < rows; i++)
-		for (int j = 0; j < cols; j++)
-		{
-			int firstSet = calculateParity((array[i][j] >> 4), 4) + calculateParity(i, 4);
-			int secondSet = calculateParity(array[i][j], 4) + calculateParity(j, 4);
-
-			// у бітах 0 - 2 знаходиться номер рядка символу(3 біти),
-			binData[count] = i;
-
-			// у бітах 3 - 6 молодша частина ASCII - коду символу(4 біти),
-			binData[count] <<= 4;
-			binData[count] |= (array[i][j] >> 4);
-
-			// 7 біт – біт парності перших двох полів(1 біт)
-			binData[count] <<= 1;
-			binData[count] |= (firstSet & 1);
-
-			// у бітах 8 - 11 старша частина ASCII - коду символу(4 біти),
-			binData[count] <<= 4;
-			binData[count] |= (array[i][j] & 15);
-
-			// у бітах 12 - 14 позиція символу в рядку(3 біти),
-			binData[count] <<= 3;
-			binData[count] |= j;
-
-			// 15 біт - біт парності попередніх двох полів(1 біт).
-			binData[count] <<= 1;
-			binData[count] |= (secondSet & 1);
-
-			++count;
-		}
-
-	ofstream binaryOutput("public/binaryOutput.dat", ios::out | ios::binary);
-	binaryOutput.write((char *)binData, sizeof(unsigned short) * 64);
-	binaryOutput.close();
-
-	FILE *f = fopen("public/binaryOutput.dat", "r");
-	fread(binData, sizeof(char), 128, f);
-	fclose(f);
-
 	for (int i = 0; i < 64; i++)
 	{
-		if (i % 8 == 0)
-			cout << endl;
-		cout << bitset<16>(binData[i]) << endl;
-	}
+		unsigned short temp = binData[i];
 
-	vector<vector<char>> outCharData(rows, vector<char>(cols));
-	int countBin = 0;
+		int rows = temp >> 13;
+		int cols = (temp >> 1) & 7;
 
-	for (int i = 0; i < 64; i++)
-	{
-		int colsBin = 0, rowsBin = 0;
-		char symbolBin = 0;
+		char symbol = (((temp >> 9) & 15) << 4) | ((temp >> 4) & 15);
 
-		rowsBin = binData[i] >> 13;
-		colsBin = (binData[i] >> 1) & 7;
+		int firstSetTemp = (temp >> 8) & 1;
+		int secondSetTemp = temp & 1;
 
-		symbolBin = binData[i] >> 9 & 15;
-		symbolBin <<= 4;
-		symbolBin |= (binData[i] >> 4) & 15;
+		int firstSet = (calcParity((symbol >> 4), 4) + calcParity(rows, 4)) & 1;
+		int secondSet = (calcParity(symbol, 4) + calcParity(cols, 4)) & 1;
 
-		int firstSet = calculateParity((symbolBin >> 4), 4) + calculateParity(rowsBin, 4);
-		int secondSet = calculateParity(symbolBin, 4) + calculateParity(colsBin, 4);
+		string binary = charToBinary(temp, 16);
 
-		if (((binData[i] >> 8) & 1) == (firstSet & 1) && ((binData[i]) & 1) == (secondSet & 1))
+		if ((firstSetTemp == firstSet) && (secondSetTemp == secondSet))
 		{
-			cout << i << " - " << bitset<16>(binData[i]) << " - Integirity passed: " << symbolBin << endl;
-			outCharData[rowsBin][colsBin] = symbolBin;
+			cout << i + 1 << " - " << binary << " - Integirity passed: " << symbol << endl;
+			charData[rows][cols] = symbol;
 		}
 		else
 		{
-			cout << i << " - " << bitset<16>(binData[i]) << " - Integirity failed: " << symbolBin << endl;
+			cout << i + 1 << " - " << binary << " - Integirity failed: " << symbol << endl;
 		}
 	}
+}
 
-	outputArray(outCharData);
+void createBinaryFile(const string &fileName)
+{
+	ofstream outputFile(fileName, ios::out | ios::binary);
+	if (!outputFile)
+	{
+		cerr << "No such file: " << fileName << endl;
+		return;
+	}
+	outputFile.close();
+}
+
+void writeBinaryFile(const string &fileName, unsigned short *data, size_t dataSize)
+{
+	ofstream outputFile(fileName, ios::out | ios::binary);
+	if (!outputFile)
+	{
+		cerr << "No such file: " << fileName << endl;
+		createBinaryFile(fileName);
+	}
+	outputFile.write((char *)data, dataSize);
+	outputFile.close();
+}
+
+void readBinaryFile(const string &fileName, unsigned short *data, size_t dataSize)
+{
+	ifstream inputFile(fileName, ios::in | ios::binary);
+	if (!inputFile)
+	{
+		cerr << "No such file: " << fileName << endl;
+		return;
+	}
+	inputFile.read((char *)data, dataSize);
+	inputFile.close();
+}
+
+void task_02()
+{
+	string inputFile = "public/binary/binaryInput.txt";
+	string outputFile = "public/binary/binaryOutput.dat";
+
+	unsigned char array[ROWS][COLS];
+	unsigned short binData[ROWS * COLS];
+	unsigned short binDatatest[ROWS * COLS];
+	unsigned char outCharData[ROWS][COLS];
+
+	readInputFile(array, "public/binary/binaryInput.txt");
+	printArray(array);
+
+	newLine();
+
+	decode(binData, array);
+
+	writeBinaryFile(outputFile, binData, sizeof(unsigned short) * 64);
+	readBinaryFile(outputFile, binDatatest, sizeof(unsigned short) * 64);
+
+	encode(outCharData, binDatatest);
+
+	newLine();
+	printArray(outCharData);
 }

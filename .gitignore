@@ -13,4 +13,4 @@
 !.vscode/extensions.json
 
 # Binary Code
-binaryOutput.dat
+/public/binary
