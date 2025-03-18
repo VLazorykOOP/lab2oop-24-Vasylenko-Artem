@@ -2,7 +2,6 @@
 
 #include <vector>
 
-bool checkChoiceInput(char ch, const std::vector<char> &validChoices);
 void chooseTask();
 
 void task_01();

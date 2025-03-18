@@ -4,6 +4,7 @@
 #include "taskManager.h"
 #include "console.h"
 #include "encryption.h"
+#include "fileManager.h"
 
 // Задано 8 рядків тексту. У рядку до 8 символів. Доповнити пробілами рядки до 8 символів.
 // Шифрувати тексти таким чином, щоб кожний символ тексту записувався у два байти.Два байти мають таку структуру:
@@ -22,28 +23,28 @@ void task_02()
 	string inputFile = "public/binary/binaryInput.txt";
 	string outputFile = "public/binary/binaryOutput.dat";
 
+	FileManager file(inputFile);
+	// file.checkFile("fstream");
+
+	// file.checkFile("ifstream");
+	// file.checkFile("ofstream");
+
+	ifstream binaryInput(inputFile, ios::out | ios::binary);
+
 	unsigned char array[ROWS][COLS];
+	unsigned short decodeArray[ROWS * COLS];
+	unsigned short encodeArray[ROWS * COLS];
+	unsigned char outCharData[ROWS][COLS];
 
 	readInputFile(array, "public/binary/binaryInput.txt");
 	printArray(array);
 
 	newLine();
 
-	unsigned short decodeArray[ROWS * COLS];
-
 	decode(decodeArray, array);
 
-	ofstream binaryOutput(outputFile, ios::out | ios::binary);
-	binaryOutput.write((char *)decodeArray, sizeof(unsigned short) * 64);
-	binaryOutput.close();
-
-	unsigned short encodeArray[ROWS * COLS];
-
-	ifstream binaryInput(outputFile, ios::in | ios::binary);
-	binaryInput.read((char *)encodeArray, sizeof(unsigned short) * 64);
-	binaryInput.close();
-
-	unsigned char outCharData[ROWS][COLS];
+	file.writeFile(decodeArray);
+	file.readFile(encodeArray);
 
 	encode(outCharData, encodeArray);
 
