@@ -65,84 +65,83 @@ void deleteFile()
 
 void task_02()
 {
-	string filepath = "public/binary/";
-	string filename;
+	// string filepath = "public/binary/";
+	// string filename;
 
-	clearConsole();
-	char ch;
+	// clearConsole();
+	// char ch;
 
-	vector<char> validChoices = {'1', '2', '3', '4', '5', '6', '7', '8', '9', 'q'};
+	// vector<char> validChoices = {'1', '2', '3', '4', '5', '6', '7', '8', '9', 'q'};
 
-	while (true)
-	{
-		showMenu();
-		cin >> ch;
-		bool selected = checkChoiceInput(ch, validChoices);
+	// while (true)
+	// {
+	// 	showMenu();
+	// 	cin >> ch;
+	// 	bool selected = checkChoiceInput(ch, validChoices);
 
-		if (!selected)
-		{
-			clearConsole();
-			cout << "Invalid choice. Please try again.\n";
-			pauseConsole();
-			continue;
-		}
+	// 	if (!selected)
+	// 	{
+	// 		clearConsole();
+	// 		cout << "Invalid choice. Please try again.\n";
+	// 		pauseConsole();
+	// 		continue;
+	// 	}
 
-		clearConsole();
-		newLine();
+	// 	clearConsole();
+	// 	newLine();
 
-		switch (ch)
-		{
-		case '1':
-			creatFile();
-			break;
-		case '2':
-			deleteFile();
-			break;
-		case '3':
-			break;
-		case '4':
-			break;
-		case '5':
-			break;
-		case '6':
-			break;
+	// 	switch (ch)
+	// 	{
+	// 	case '1':
+	// 		creatFile();
+	// 		break;
+	// 	case '2':
+	// 		deleteFile();
+	// 		break;
+	// 	case '3':
+	// 		break;
+	// 	case '4':
+	// 		break;
+	// 	case '5':
+	// 		break;
+	// 	case '6':
+	// 		break;
 
-		default:
-			break;
-		}
+	// 	default:
+	// 		break;
+	// 	}
 
-		if (ch == 'q')
-			break;
-	}
+	// 	if (ch == 'q')
+	// 		break;
+	// }
 
-	// cout << "Enter file name: ";
-	// cin >> filename;
+	filename = getFilename();
 
-	// filepath += filename;
+	filepath = path + filename;
 
-	// FileManager inputFile(filepath + ".txt");
-	// FileManager outputFile(filepath + ".dat");
+	FileManager inputFile(filepath + ".txt");
+	FileManager outputFile(filepath + ".dat");
 
-	// inputFile.checkFile();
-	// outputFile.checkFile();
+	inputFile.checkFile();
+	outputFile.checkFile();
 
-	// unsigned char array[ROWS][COLS];
-	// unsigned short decodeArray[ROWS * COLS];
-	// unsigned short encodeArray[ROWS * COLS];
-	// unsigned char outCharData[ROWS][COLS];
+	unsigned char array[ROWS][COLS];
+	unsigned short decodeArray[ROWS * COLS];
+	unsigned short encodeArray[ROWS * COLS];
+	unsigned char outCharData[ROWS][COLS];
 
-	// readInputFile(array, inputFile.filename);
-	// printArray(array);
+	readInputFile(array, inputFile.filename);
+	printArray(array);
 
-	// newLine();
+	newLine();
 
-	// decode(decodeArray, array);
+	decode(decodeArray, array);
 
-	// outputFile.writeFile(decodeArray);
-	// outputFile.readFile(encodeArray);
+	outputFile.writeFile(decodeArray);
+	outputFile.readFile(encodeArray);
 
-	// encode(outCharData, encodeArray);
+	encode(outCharData, encodeArray);
 
-	// newLine();
-	// printArray(outCharData);
+	newLine();
+	printArray(outCharData);
 }

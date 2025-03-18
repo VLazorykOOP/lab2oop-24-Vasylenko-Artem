@@ -25,10 +25,7 @@ typedef struct crypto
 
 	} cryptoSymbol;
 
-	char binaryToChar()
-	{
-		return ((cryptoSymbol.juniorSymbol << 4) | (cryptoSymbol.seniorSymbol));
-	}
+	char binaryToChar() { return ((cryptoSymbol.juniorSymbol << 4) | (cryptoSymbol.seniorSymbol)); }
 } crypto;
 
 void decode2(unsigned short binData[ROWS * COLS], unsigned char charData[ROWS][COLS])
