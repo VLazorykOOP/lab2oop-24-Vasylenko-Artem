@@ -51,7 +51,7 @@ void FileManager::checkFile()
 	if (!file.is_open())
 	{
 		createFile();
-		cout << "File created" << endl;
+		cout << "File created: " << filename << endl;
 	}
 
 	file.close();
@@ -59,6 +59,7 @@ void FileManager::checkFile()
 
 void FileManager::deleteFile()
 {
+	closeFile();
 	remove(filename.c_str());
 }
 

@@ -21,16 +21,47 @@ using namespace std;
 void showMenu()
 {
 	cout << "File manager" << endl;
+	cout << "0. Open file" << endl;
 	cout << "1. Create file" << endl;
-	cout << "3. Delete file" << endl;
-	cout << "4. Open file" << endl;
-	cout << "5. Close file" << endl;
-	cout << "6. Write to file" << endl;
-	cout << "7. Read from file" << endl;
-	cout << "8. Append to file" << endl;
-	cout << "9. Clear file" << endl;
-	cout << "10. Read file" << endl;
-	cout << "11. Write file" << endl;
+	cout << "2. Delete file" << endl;
+	cout << "3. Write to file" << endl;
+	cout << "4. Read from file" << endl;
+	cout << "5. Append to file" << endl;
+	cout << "6. Clear file" << endl;
+	cout << "q. Quit" << endl;
+}
+
+string path = "./public/binary/";
+string filename;
+string filepath;
+
+string getFilename()
+{
+	string filename;
+	cout << "Enter file name: ";
+	cin >> filename;
+	return filename;
+}
+
+void creatFile()
+{
+	filename = getFilename();
+
+	filepath = path + filename + ".txt";
+	filepath = path + filename + ".txt";
+	FileManager fileTxt(filepath);
+
+	fileTxt.checkFile();
+
+	filepath = path + filename + ".dat";
+	FileManager fileBin(filepath);
+	fileBin.checkFile();
+}
+
+void deleteFile()
+{
+	FileManager file(filepath);
+	file.deleteFile();
 }
 
 void task_02()
@@ -58,64 +89,61 @@ void task_02()
 		}
 
 		clearConsole();
-		cout << "Task" << ch << " selected\n";
 		newLine();
 
 		switch (ch)
 		{
 		case '1':
-			// task_01();
+			creatFile();
 			break;
 		case '2':
-			// task_02();
+			deleteFile();
 			break;
 		case '3':
-			// task_03();
 			break;
 		case '4':
-			// task_04();
 			break;
-		case 'q':
+		case '5':
 			break;
-			;
+		case '6':
+			break;
+
+		default:
+			break;
 		}
 
 		if (ch == 'q')
-		{
 			break;
-		}
-
-		// pauseConsole();
 	}
 
-	cout << "Enter file name: ";
-	cin >> filename;
+	// cout << "Enter file name: ";
+	// cin >> filename;
 
-	filepath += filename;
+	// filepath += filename;
 
-	FileManager inputFile(filepath + ".txt");
-	FileManager outputFile(filepath + ".dat");
+	// FileManager inputFile(filepath + ".txt");
+	// FileManager outputFile(filepath + ".dat");
 
-	inputFile.checkFile();
-	outputFile.checkFile();
+	// inputFile.checkFile();
+	// outputFile.checkFile();
 
-	unsigned char array[ROWS][COLS];
-	unsigned short decodeArray[ROWS * COLS];
-	unsigned short encodeArray[ROWS * COLS];
-	unsigned char outCharData[ROWS][COLS];
+	// unsigned char array[ROWS][COLS];
+	// unsigned short decodeArray[ROWS * COLS];
+	// unsigned short encodeArray[ROWS * COLS];
+	// unsigned char outCharData[ROWS][COLS];
 
-	readInputFile(array, inputFile.filename);
-	printArray(array);
+	// readInputFile(array, inputFile.filename);
+	// printArray(array);
 
-	newLine();
+	// newLine();
 
-	decode(decodeArray, array);
+	// decode(decodeArray, array);
 
-	outputFile.writeFile(decodeArray);
-	outputFile.readFile(encodeArray);
+	// outputFile.writeFile(decodeArray);
+	// outputFile.readFile(encodeArray);
 
-	encode(outCharData, encodeArray);
+	// encode(outCharData, encodeArray);
 
-	newLine();
-	printArray(outCharData);
+	// newLine();
+	// printArray(outCharData);
 }

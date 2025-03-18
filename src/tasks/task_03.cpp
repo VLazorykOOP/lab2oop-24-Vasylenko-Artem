@@ -14,12 +14,12 @@ typedef struct crypto
 	{
 		struct
 		{
-			unsigned int row : 3;
-			unsigned int juniorSymbol : 4;
-			unsigned int firstSet : 1;
-			unsigned int seniorSymbol : 4;
-			unsigned int col : 3;
 			unsigned int secondSet : 1;
+			unsigned int col : 3;
+			unsigned int seniorSymbol : 4;
+			unsigned int firstSet : 1;
+			unsigned int juniorSymbol : 4;
+			unsigned int row : 3;
 		};
 		unsigned int symbol;
 
@@ -89,6 +89,8 @@ void encode2(unsigned char charData[ROWS][COLS], unsigned short binData[ROWS * C
 	}
 }
 
+// 0000011000010001
+
 void task_03()
 {
 	string filepath = "public/binary/";
@@ -115,72 +117,13 @@ void task_03()
 
 	newLine();
 
-	decode(decodeArray, array);
+	decode2(decodeArray, array);
 
 	outputFile.writeFile(decodeArray);
 	outputFile.readFile(encodeArray);
 
-	encode(outCharData, encodeArray);
+	encode2(outCharData, encodeArray);
 
 	newLine();
 	printArray(outCharData);
 }
-
-// #include <iostream>
-// #include <fstream>
-
-// #include "taskManager.h"
-// #include "console.h"
-// #include "encryption.h"
-// #include "fileManager.h"
-
-// Задано 8 рядків тексту. У рядку до 8 символів. Доповнити пробілами рядки до 8 символів.
-// Шифрувати тексти таким чином, щоб кожний символ тексту записувався у два байти.Два байти мають таку структуру:
-
-// у бітах 0 - 2 знаходиться номер рядка символу(3 біти),
-// у бітах 3 - 6 молодша частина ASCII - коду символу(4 біти),
-// 7 біт – біт парності перших двох полів(1 біт)
-// у бітах 8 - 11 старша частина ASCII - коду символу(4 біти),
-// у бітах 12 - 14 позиція символу в рядку(3 біти),
-// 15 біт - біт парності попередніх двох полів(1 біт).
-
-// using namespace std;
-
-// 000 0011 0 0001 000 1
-
-// void task_02()
-// {
-// 	string filepath = "public/binary/";
-// 	string filename;
-
-// 	cout << "Enter file name: ";
-// 	cin >> filename;
-
-// 	filepath += filename;
-
-// 	FileManager inputFile(filepath + ".txt");
-// 	FileManager outputFile(filepath + ".dat");
-
-// 	inputFile.checkFile();
-// 	outputFile.checkFile();
-
-// 	unsigned char array[ROWS][COLS];
-// 	unsigned short decodeArray[ROWS * COLS];
-// 	unsigned short encodeArray[ROWS * COLS];
-// 	unsigned char outCharData[ROWS][COLS];
-
-// 	readInputFile(array, inputFile.filename);
-// 	printArray(array);
-
-// 	newLine();
-
-// 	decode(decodeArray, array);
-
-// 	outputFile.writeFile(decodeArray);
-// 	outputFile.readFile(encodeArray);
-
-// 	encode(outCharData, encodeArray);
-
-// 	newLine();
-// 	printArray(outCharData);
-// }
