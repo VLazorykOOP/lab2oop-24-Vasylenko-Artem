@@ -7,24 +7,17 @@
 
 using namespace std;
 
-namespace fileManager
-{
-	void menu();
-	void showMenu();
-	void createFile();
-}
-
 class FileManager
 {
-private:
-	string filename;
-
 public:
-	FileManager(string filename) : filename(filename) {}
+	string filename;
+	FileManager(string filename) : filename(filename)
+	{
+		createFile();
+	}
 
-	void menu();
 	void createFile();
-	void checkFile(string option);
+	void checkFile();
 	void deleteFile();
 	void openFile();
 	void closeFile();

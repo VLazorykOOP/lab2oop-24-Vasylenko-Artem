@@ -6,33 +6,17 @@
 
 using namespace std;
 
-void showMenu()
-{
-	cout << "File manager" << endl;
-	cout << "1. Create file" << endl;
-	cout << "3. Delete file" << endl;
-	cout << "4. Open file" << endl;
-	cout << "5. Close file" << endl;
-	cout << "6. Write to file" << endl;
-	cout << "7. Read from file" << endl;
-	cout << "8. Append to file" << endl;
-	cout << "9. Clear file" << endl;
-	cout << "10. Read file" << endl;
-	cout << "11. Write file" << endl;
-}
-
 class FileManager
 {
-private:
-	string filename;
-
 public:
-	FileManager(string filename) : filename(filename) {}
-
-	void menu();
+	string filename;
+	FileManager(string filename) : filename(filename)
+	{
+		createFile();
+	}
 
 	void createFile();
-	void checkFile(string option);
+	void checkFile();
 	void deleteFile();
 	void openFile();
 	void closeFile();
@@ -44,109 +28,33 @@ public:
 	void writeFile(unsigned short arr[ROWS * COLS]);
 };
 
-void showMenu()
-{
-	cout << "File manager" << endl;
-	cout << "1. Create file" << endl;
-	cout << "3. Delete file" << endl;
-	cout << "4. Open file" << endl;
-	cout << "5. Close file" << endl;
-	cout << "6. Write to file" << endl;
-	cout << "7. Read from file" << endl;
-	cout << "8. Append to file" << endl;
-	cout << "9. Clear file" << endl;
-	cout << "10. Read file" << endl;
-	cout << "11. Write file" << endl;
-}
-
-void FileManager::menu()
-{
-	clearConsole();
-	char ch;
-	vector<char> validChoices = {'1', '2', '3', '4', 'q'};
-
-	while (true)
-	{
-		showMenu();
-		cin >> ch;
-		bool selected = checkChoiceInput(ch, validChoices);
-
-		if (!selected)
-		{
-			clearConsole();
-			cout << "Invalid choice. Please try again.\n";
-			pauseConsole();
-			continue;
-		}
-
-		clearConsole();
-		cout << "Task" << ch << " selected\n";
-		newLine();
-
-		switch (ch)
-		{
-		case '1':
-			// task_01();
-			break;
-		case '2':
-			// task_02();
-			break;
-		case '3':
-			// task_03();
-			break;
-		case '4':
-			// task_04();
-			break;
-		case 'q':
-			cout << "Goodbye!\n\n";
-			return;
-		}
-
-		pauseConsole();
-	}
-}
-
 void FileManager::createFile()
 {
+	ifstream check(filename, ios::out | ios::binary);
+
+	if (check.is_open())
+	{
+		cout << "File already exists" << endl;
+		check.close();
+		return;
+	}
+
 	ofstream file(filename, ios::out | ios::binary);
 	file.close();
 }
 
-void FileManager::checkFile(string option)
+void FileManager::checkFile()
 {
-	if (option == "ifstream")
-	{
-		ifstream file(filename, ios::out | ios::binary);
 
-		if (!file.is_open())
-		{
-			createFile();
-			cout << "File created" << endl;
-		}
-		file.close();
-	}
-	else if (option == "ofstream")
-	{
-		ofstream file(filename, ios::out | ios::binary);
+	ifstream file(filename, ios::out | ios::binary);
 
-		if (!file.is_open())
-		{
-			createFile();
-			cout << "File created" << endl;
-		}
-		file.close();
-	}
-	else if (option == "fstream")
+	if (!file.is_open())
 	{
-		fstream file(filename, ios::out | ios::binary);
-
-		if (!file.is_open())
-		{
-			createFile();
-			cout << "File created" << endl;
-		}
-		file.close();
+		createFile();
+		cout << "File created" << endl;
 	}
+
+	file.close();
 }
 
 void FileManager::deleteFile()
