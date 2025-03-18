@@ -48,7 +48,6 @@ void creatFile()
 	filename = getFilename();
 
 	filepath = path + filename + ".txt";
-	filepath = path + filename + ".txt";
 	FileManager fileTxt(filepath);
 
 	fileTxt.checkFile();
