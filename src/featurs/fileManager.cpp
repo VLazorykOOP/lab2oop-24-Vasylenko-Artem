@@ -10,10 +10,7 @@ class FileManager
 {
 public:
 	string filename;
-	FileManager(string filename) : filename(filename)
-	{
-		createFile();
-	}
+	FileManager(string filename) : filename(filename) { createFile(); }
 
 	void createFile();
 	void checkFile();
@@ -34,7 +31,6 @@ void FileManager::createFile()
 
 	if (check.is_open())
 	{
-		cout << "File already exists" << endl;
 		check.close();
 		return;
 	}
@@ -51,7 +47,6 @@ void FileManager::checkFile()
 	if (!file.is_open())
 	{
 		createFile();
-		cout << "File created: " << filename << endl;
 	}
 
 	file.close();
@@ -89,13 +84,6 @@ string FileManager::readFromFile()
 	file >> data;
 	file.close();
 	return data;
-}
-
-void FileManager::appendToFile(string data)
-{
-	ofstream file(filename, ios::out | ios::binary);
-	file << data;
-	file.close();
 }
 
 void FileManager::clearFile()

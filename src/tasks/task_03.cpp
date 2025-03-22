@@ -86,17 +86,9 @@ void encode2(unsigned char charData[ROWS][COLS], unsigned short binData[ROWS * C
 	}
 }
 
-// 0000011000010001
-
 void task_03()
 {
-	string filepath = "public/binary/";
-	string filename;
-
-	cout << "Enter file name: ";
-	cin >> filename;
-
-	filepath += filename;
+	string filepath = "public/binary/output";
 
 	FileManager inputFile(filepath + ".txt");
 	FileManager outputFile(filepath + ".dat");
